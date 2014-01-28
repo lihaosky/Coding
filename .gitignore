@@ -1,6 +1,5 @@
-*
-!*.c
-!*.java
-!*.cc
-!*.cpp
-!*.h
+a.out
+*.o
+*.a
+*.class
+bin/*
