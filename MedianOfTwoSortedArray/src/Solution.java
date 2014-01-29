@@ -13,6 +13,7 @@
  *    Be aware that A and B should be chopped same number then the median of sub-array will remain
  *    median of original array.
  *    
+ * Complexity: O(log(m+n))
  * @author hali3
  *
  */
