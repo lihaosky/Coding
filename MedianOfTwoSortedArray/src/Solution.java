@@ -1,4 +1,21 @@
+/*
+ * There are two sorted arrays A and B of size m and n respectively. 
+ * Find the median of the two sorted arrays. 
+ * The overall run time complexity should be O(log (m+n)).
+ */
 
+/**
+ * Solution: Be aware if the number is even, you need to get the average of middle two numbers.
+ * 1. Base case: A or B has 1 number or 2 numbers. Need to work carefully about these cases.
+ * 2. Compare middle of A and B, if A is larger, it lies in first part of A and second part of B
+ *    If B is larger, it lies in first part of B and second part of B.
+ *    Be aware that if A or B has even number, one more number past mid should be included.
+ *    Be aware that A and B should be chopped same number then the median of sub-array will remain
+ *    median of original array.
+ *    
+ * @author hali3
+ *
+ */
 public class Solution {
     public double findMedianSortedArrays(int A[], int B[]) {
     	if (A.length == 0 && B.length == 0) {
