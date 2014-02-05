@@ -72,16 +72,23 @@ public class Solution {
     		}
     		
     		tmpStates = new HashSet<Integer>();
+    		boolean matched = false;
     		for (int state : states) {
     			ArrayList<Transition> transitions = transitionMap.get(state);
     			for (Transition t : transitions) {
-    				if (t.transit.equals("wild") || t.transit.equals("empty") || t.transit.equals(s.charAt(i) + "")) {
+    				if (t.transit.equals("wild") || t.transit.equals(s.charAt(i) + "")) {
     					tmpStates.add(t.nextState);
-    				} 
+    					matched = true;
+    				}
     			}
     		}
+    		if (tmpStates.size() == 0) {
+    			return false;
+    		}
+    		if (matched) {
+    			i++;
+    		}
     		states = tmpStates;
-    		i++;
     	}
     	for (int state : states) {
     		ArrayList<Transition> transitions = transitionMap.get(state);
@@ -149,5 +156,6 @@ public class Solution {
     
 	public static void main(String[] args) {
 		System.out.println(new Solution().isMatch("aaa", "c*a*aaa"));
+		System.out.println(new Solution().isMatch("aaa", "ab*a"));
 	}
 }
