@@ -1,4 +1,8 @@
 /* Find the head of loop of singly list and free the list */
+/* 
+ * This program find the head of loop and free the list
+ */
+
 #include <stdio.h>
 #include <stdlib.h>
 
