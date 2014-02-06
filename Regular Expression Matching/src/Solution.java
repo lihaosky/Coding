@@ -157,5 +157,6 @@ public class Solution {
 	public static void main(String[] args) {
 		System.out.println(new Solution().isMatch("aaa", "c*a*aaa"));
 		System.out.println(new Solution().isMatch("aaa", "ab*a"));
+		System.out.println(new Solution().isMatch("   ", ".*"));
 	}
 }
