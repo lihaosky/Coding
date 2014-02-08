@@ -23,6 +23,8 @@ isMatch("aab", "c*a*b") → true
 /**
  * Nondeterministic finite automata
  * 
+ * And a much simpler solution with recursion...
+ * 
  * @author lihaosky
  *
  */
@@ -44,6 +46,37 @@ class Transition {
 }
 
 public class Solution {
+	/**
+	 * This method uses recursion to match, much simpler than the NFA method...
+	 * @param s
+	 * @param p
+	 * @return
+	 */
+	public boolean isMatch1(String s, String p) {
+		// If s and p are both empty
+		if (s.length() == 0 && p.length() == 0) {
+			return true;
+		}
+		// If one of s and p's length is 0
+		// S's length is 0 and p's length isn't 0 can still match. e.g. "" and "b*"
+		if (p.length() == 0) {
+			return false;
+		}
+		if (p.length() == 1) {
+			return s.length() == 1 && (s.charAt(0) == p.charAt(0) || p.charAt(0) == '.');
+		}
+		if (p.charAt(1) != '*') {
+			return s.length() > 0 && (s.charAt(0) == p.charAt(0) || p.charAt(0) == '.') && isMatch1(s.substring(1), p.substring(1));
+		}
+		int i = 0;
+		while (i < s.length() && (p.charAt(0) == '.' || s.charAt(i) == p.charAt(0))) {
+			if (isMatch1(s.substring(i + 1), p.substring(2))) {
+				return true;
+			}
+			i++;
+		}
+		return isMatch1(s, p.substring(2));
+	}
 	
     public boolean isMatch(String s, String p) {
     	HashSet<Integer> states = new HashSet<Integer>();
@@ -158,5 +191,9 @@ public class Solution {
 		System.out.println(new Solution().isMatch("aaa", "c*a*aaa"));
 		System.out.println(new Solution().isMatch("aaa", "ab*a"));
 		System.out.println(new Solution().isMatch("   ", ".*"));
+		System.out.println(new Solution().isMatch1("aaa", "c*a*aaa"));
+		System.out.println(new Solution().isMatch1("aaa", "ab*a"));
+		System.out.println(new Solution().isMatch1("   ", ".*"));
+		System.out.println("a".substring(1));
 	}
 }
