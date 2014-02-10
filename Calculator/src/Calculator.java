@@ -1,13 +1,24 @@
-
+/**
+ * Syntax calculator
+ * Expr = Term + Expr | Term - Expr | Term
+ * Term = Factor * Term | Factor / Term | Factor
+ * Factor = Number | (Expr)
+ * 
+ * @author lihaosky
+ *
+ */
 public class Calculator {
-	private String expression;
-	private int curIndex;
-	private boolean isError;
+	private String expression = "";
+	private int curIndex = 0;
+	private boolean isError = false;
 	
 	public Calculator(String exp) {
-		expression = exp;
-		curIndex = 0;
-		isError = false;
+		for (int i = 0; i < exp.length(); i++) {
+			if (exp.charAt(i) == ' ') {
+				continue;
+			}
+			expression += exp.charAt(i);
+		}
 	}
 	
 	public double calculate() {
@@ -22,15 +33,8 @@ public class Calculator {
 		return result;
 	}
 	
-	private void eatSpace() {
-		while (curIndex < expression.length() && (expression.charAt(curIndex) == '\t' || expression.charAt(curIndex) == ' ')) {
-			curIndex++;
-		}
-	}
-	
 	private double expr() {
 		double result = term();
-		eatSpace();
 		// Nothing left
 		if (curIndex >= expression.length()) {
 			return result;
@@ -54,7 +58,6 @@ public class Calculator {
 	
 	private double term() {
 		double result = factor();
-		eatSpace();
 		if (curIndex >= expression.length()) {
 			return result;
 		}
@@ -79,7 +82,6 @@ public class Calculator {
 	}
 	
 	private double factor() {
-		eatSpace();
 		if (curIndex >= expression.length()) {
 			isError = true;
 			return 0;
@@ -89,7 +91,6 @@ public class Calculator {
 			while (true) {
 				number += expression.charAt(curIndex);
 				curIndex++;
-				eatSpace();
 				if (curIndex >= expression.length()) {
 					break;
 				}
