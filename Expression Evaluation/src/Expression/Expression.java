@@ -275,7 +275,7 @@ public class Expression {
 	 * @param postfix Tokenized list
 	 * @return Postfix expression value
 	 */
-	private static Operand evaluatePostfix(ArrayList<Token> postfix) {
+	public static Operand evaluatePostfix(ArrayList<Token> postfix) {
 		Stack<Token> stack = new Stack<Token>();
 		for (Token token : postfix) {
 			// Operand, put to stack
@@ -290,7 +290,7 @@ public class Expression {
 						Token t = new Token(token.getOperator().evaluate(t2.getOperand(), t1.getOperand()));
 						stack.push(t);
 					} catch (Exception e) {
-						throw new ExpressionException("Invalid postfix");
+						throw new ExpressionException("Invalid postfix expression");
 					}
 				} else if (token.getOperator().isUnary()) {
 					try {
@@ -298,17 +298,17 @@ public class Expression {
 						Token t = new Token(token.getOperator().evaluate(t1.getOperand()));
 						stack.push(t);
 					} catch (Exception e) {
-						throw new ExpressionException("Invalid postfix");
+						throw new ExpressionException("Invalid postfix expression");
 					}
 				} else {
-					throw new ExpressionException("Invalid postfix");
+					throw new ExpressionException("Invalid postfix expression");
 				}
 			} else {
-				throw new ExpressionException("Invalid token");
+				throw new ExpressionException("Invalid token in postfix expressioin");
 			}
 		}
 		if (stack.size() != 1) {
-			throw new ExpressionException("Invalid postfix");
+			throw new ExpressionException("Invalid postfix expression");
 		}
 		return stack.pop().getOperand();
 	}
@@ -354,7 +354,7 @@ public class Expression {
 			
 		});
 		Operator minusOp = new Operator('-', false, true, 0, true, "Subtract operator");
-		addOp.addEvaluator(new Evaluator() {
+		minusOp.addEvaluator(new Evaluator() {
 			@Override
 			public Operand binaryAction(Operand operand1, Operand operand2) {
 				return new Operand(operand1.getValue() - operand2.getValue());
@@ -367,10 +367,10 @@ public class Expression {
 			
 		});
 		Operator multiplyOp = new Operator('*', false, true, 1, true, "Multiply operator");
-		addOp.addEvaluator(new Evaluator() {
+		multiplyOp.addEvaluator(new Evaluator() {
 			@Override
 			public Operand binaryAction(Operand operand1, Operand operand2) {
-				return new Operand(operand1.getValue() - operand2.getValue());
+				return new Operand(operand1.getValue() * operand2.getValue());
 			}
 
 			@Override
@@ -380,7 +380,7 @@ public class Expression {
 			
 		});
 		Operator divideOp = new Operator('/', false, true, 1, true, "Divide operator");
-		addOp.addEvaluator(new Evaluator() {
+		divideOp.addEvaluator(new Evaluator() {
 			@Override
 			public Operand binaryAction(Operand operand1, Operand operand2) {
 				return new Operand(operand1.getValue() / operand2.getValue());
@@ -393,7 +393,7 @@ public class Expression {
 			
 		});
 		Operator modOp = new Operator('%', false, true, 2, true, "Mod operator");
-		addOp.addEvaluator(new Evaluator() {
+		modOp.addEvaluator(new Evaluator() {
 			@Override
 			public Operand binaryAction(Operand operand1, Operand operand2) {
 				return new Operand(operand1.getValue() % operand2.getValue());
@@ -406,7 +406,7 @@ public class Expression {
 			
 		});
 		Operator powerOp = new Operator('^', false, true, 3, false, "Power operator");
-		addOp.addEvaluator(new Evaluator() {
+		powerOp.addEvaluator(new Evaluator() {
 			@Override
 			public Operand binaryAction(Operand operand1, Operand operand2) {
 				return new Operand(Math.pow(operand1.getValue(), operand2.getValue()));
@@ -419,7 +419,7 @@ public class Expression {
 			
 		});
 		Operator positiveOp = new Operator('+', true, false, 3, true, "Positive operator");
-		addOp.addEvaluator(new Evaluator() {
+		positiveOp.addEvaluator(new Evaluator() {
 			@Override
 			public Operand binaryAction(Operand operand1, Operand operand2) {
 				return null;
@@ -432,7 +432,7 @@ public class Expression {
 			
 		});
 		Operator negtiveOp = new Operator('-', true, false, 3, true, "Negative operator");
-		addOp.addEvaluator(new Evaluator() {
+		negtiveOp.addEvaluator(new Evaluator() {
 			@Override
 			public Operand binaryAction(Operand operand1, Operand operand2) {
 				return null;
@@ -440,7 +440,7 @@ public class Expression {
 
 			@Override
 			public Operand unaryAction(Operand operand) {
-				return new Operand(operand.getValue());
+				return new Operand(operand.getValue() * -1);
 			}
 			
 		});

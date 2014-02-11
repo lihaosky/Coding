@@ -103,7 +103,7 @@ public class Operator implements Comparable<Operator> {
 	 * @return
 	 */
 	public boolean isUnary() {
-		return (type | UNARY) != 0;
+		return (type & UNARY) != 0;
 	}
 	
 	/**
@@ -111,7 +111,7 @@ public class Operator implements Comparable<Operator> {
 	 * @return
 	 */
 	public boolean isBinary() {
-		return (type | BINARY) != 0;
+		return (type & BINARY) != 0;
 	}
 	
 	/**

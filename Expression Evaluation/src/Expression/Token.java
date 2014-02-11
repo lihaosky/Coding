@@ -24,14 +24,17 @@ public class Token {
 	private int type;
 	private Operand operand = null;
 	private Operator operator = null;
+	private String name = "";
 	
 	public Token(Operator operator) {
 		this.operator = operator;
+		name = operator.getName();
 		type = OPERATOR;
 	}
 	
 	public Token(Operand operand) {
 		this.operand = operand;
+		name = operand.getStringValue();
 		type = OPERAND;
 	}
 	
@@ -43,6 +46,11 @@ public class Token {
 		} else {
 			throw new ExpressionException("Invlid Token");
 		}
+		name = string;
+	}
+	
+	public String getName() {
+		return name;
 	}
 	
 	public Operator getOperator() {
@@ -76,5 +84,12 @@ public class Token {
 			s = s.replaceAll(ingoreChar, "");
 		}
 		return s;
+	}
+	
+	public static void printTokenList(ArrayList<Token> list) {
+		for (Token t : list) {
+			System.out.print(t.getName() + " ");
+		}
+		System.out.println();
 	}
 }
