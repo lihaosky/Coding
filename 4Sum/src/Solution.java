@@ -10,6 +10,7 @@ Note:
     The solution set must not contain duplicate quadruplets.
  * @author lihaosky
  *
+ * Solution: similiar to 3sum. Just change to 4
  */
 public class Solution {
     public ArrayList<ArrayList<Integer>> fourSum(int[] num, int target) {

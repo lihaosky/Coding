@@ -12,7 +12,7 @@ public class Operator implements Comparable<Operator> {
 	private static final int UNARY = 0x1;
 	private static final int BINARY = 0x2;
 	
-	public static ArrayList<String> validName = new ArrayList<String>();
+	private static ArrayList<String> validName = new ArrayList<String>();
 	
 	private int type = 0x0;
 	private boolean associativity = true;
@@ -100,7 +100,7 @@ public class Operator implements Comparable<Operator> {
 	
 	/**
 	 * If this is unary operator
-	 * @return
+	 * @return True if it is unary operator. False otherwise
 	 */
 	public boolean isUnary() {
 		return (type & UNARY) != 0;
@@ -108,7 +108,7 @@ public class Operator implements Comparable<Operator> {
 	
 	/**
 	 * If this is binary operator
-	 * @return
+	 * @return True if it is binary operator. False otherwise
 	 */
 	public boolean isBinary() {
 		return (type & BINARY) != 0;
@@ -116,7 +116,7 @@ public class Operator implements Comparable<Operator> {
 	
 	/**
 	 * If this is left associative
-	 * @return
+	 * @return True is it is left associative. Flase otherwise
 	 */
 	public boolean isLeftAssociative() {
 		return this.associativity;
@@ -124,7 +124,7 @@ public class Operator implements Comparable<Operator> {
 	
 	/**
 	 * Get operator name
-	 * @return
+	 * @return Operator name
 	 */
 	public String getName() {
 		return name;
@@ -132,7 +132,7 @@ public class Operator implements Comparable<Operator> {
 	
 	/**
 	 * Get precedence
-	 * @return
+	 * @return Operator precedence
 	 */
 	public int getPrecedence() {
 		return precedence;
@@ -140,7 +140,7 @@ public class Operator implements Comparable<Operator> {
 	
 	/**
 	 * Get description
-	 * @return
+	 * @return Description
 	 */
 	public String getDescription() {
 		return description;
@@ -148,7 +148,7 @@ public class Operator implements Comparable<Operator> {
 	
 	/**
 	 * Add an evaluator
-	 * @param Evaluator
+	 * @param evaluator Evaluator to be added
 	 */
 	public void addEvaluator(Evaluator evaluator) {
 		this.evaluator = evaluator;

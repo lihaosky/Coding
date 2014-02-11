@@ -12,7 +12,7 @@ public class Main {
 		String s = "   abs skdk ";
 		String s1 = s.replaceAll(" ", "");
 		System.out.println(s1 + " " + s1.length());
-		ArrayList<Token> tokenList = new Tokenizer("2,3,*,3,/,7,+").getPostfixTokenList();
+		ArrayList<Token> tokenList = Expression.getPostfix("2,3,*,3,/,7,+");
 		Token.printTokenList(tokenList);
 		System.out.println(Expression.evaluatePostfix(tokenList).getValue());
 		

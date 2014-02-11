@@ -47,8 +47,17 @@ public class Expression {
 	private String value = "";
 	private ArrayList<Operator> operatorList = null;
 	
+	/**
+	 * Deault operator list
+	 */
 	public static  final ArrayList<Operator> defaultOperatorList = new ArrayList<Operator>();
+	/**
+	 * Infix type
+	 */
 	public static final int INFIX = 0;
+	/**
+	 * Postfix type
+	 */
 	public static final int POSTFIX = 1;
 	
 	static {
@@ -97,6 +106,12 @@ public class Expression {
 		this.operatorList = Expression.defaultOperatorList;
 	}
 	
+	/**
+	 * Constructor
+	 * @param expression The expression passed to class. Space will be ignored. Float number allowed
+	 * @param type type Expression type. Infix or Postfix
+	 * @param operatorList A list of operators
+	 */
 	public Expression(String expression, int type, ArrayList<Operator> operatorList) {
 		this.expression = expression;
 		pureExpression = Token.removeIgnoreChars(expression);
@@ -116,6 +131,11 @@ public class Expression {
 		}
 	}
 	
+	/**
+	 * Constructor
+	 * @param expression expression The expression passed to class. Space will be ignored. Float number allowed
+	 * @param operatorList A list of operators
+	 */
 	public Expression(String expression, ArrayList<Operator> operatorList) {
 		// Remove all the spaces
 		this.expression = expression;
@@ -159,39 +179,210 @@ public class Expression {
 	}
 	
 	/**
+	 * Convert from string expression to infix token list
+	 * @param expression String expression
+	 * @param operatorList A list of operators
+	 * @return Infix token list
+	 */
+	public static ArrayList<Token> getInfix(String expression, ArrayList<Operator> operatorList) {
+		expression = Token.removeIgnoreChars(expression);
+		Tokenizer tokenizer = new Tokenizer(expression, operatorList);
+		String[] tokens = tokenizer.getInfixTokens();
+		Token previousToken = null;
+		ArrayList<Token> tokenList = new ArrayList<Token>();
+		
+		for (String token : tokens) {
+			Token nextToken;
+			if (token.equals("(")) {
+				if (previousToken == null) {
+					nextToken = new Token("(");
+				} else {
+					switch (previousToken.getType()) {
+					case Token.OPERAND:
+						throw new ExpressionException("Invalid infix expression: \"(\" after operand");
+					case Token.RIGHTBRACE:
+						throw new ExpressionException("Invalid infix expression: \"(\" after \")\"");
+					case Token.OPERATOR:
+					case Token.LEFTBRACE:
+						nextToken = new Token("(");
+						break;
+					default:
+						throw new ExpressionException("Invalid infix expression: unknow token type");
+					}
+				}
+			} else if (token.equals(")")) {
+				if (previousToken == null) {
+					nextToken = new Token(")");
+				} else {
+					switch (previousToken.getType()) {
+					case Token.LEFTBRACE:
+						throw new ExpressionException("Invalid infix expression: \")\" after \"(\"");
+					case Token.OPERATOR:
+						throw new ExpressionException("Invalid infix expression: \")\" after operator");
+					case Token.OPERAND:
+					case Token.RIGHTBRACE:
+						nextToken = new Token(")");
+						break;
+					default:
+						throw new ExpressionException("Invalid infix expression: unknow token type");
+					}
+				}
+			} else if (tokenizer.isOperator(token)) {
+				// Must be a unary operator
+				if (previousToken == null) {
+					Operator op = tokenizer.getUnary(token);
+					if (op == null) {
+						throw new ExpressionException("Invalid infix expression: leading binary operator");
+					}
+					nextToken = new Token(op);
+				} else {
+					Operator op;
+					switch (previousToken.getType()) {
+					case Token.OPERAND:
+					case Token.RIGHTBRACE:
+						op = tokenizer.getBinary(token);
+						if (op == null) {
+							throw new ExpressionException("Invalid infix expression: Unary operator after operand");
+						}
+						nextToken = new Token(op);
+						break;
+					case Token.LEFTBRACE:
+					case Token.OPERATOR:
+						op = tokenizer.getUnary(token);
+						if (op == null) {
+							throw new ExpressionException("Invalid infix expression: Binary operator after operator");
+						}
+						nextToken = new Token(op);
+						break;
+					default:
+						throw new ExpressionException("Invalid infix expression: unknow token type");
+					}
+				}
+			} else {
+				Operand operand = new Operand(token);
+				if (previousToken == null) {
+					nextToken = new Token(operand);
+				} else {
+					switch (previousToken.getType()) {
+					case Token.OPERAND:
+						throw new ExpressionException("Invalid infix expression: operand after operand");
+					case Token.RIGHTBRACE:
+						throw new ExpressionException("Invalid infix expression: operand after right brace");
+					case Token.LEFTBRACE:
+					case Token.OPERATOR:
+						nextToken = new Token(operand);
+						break;
+					default:
+						throw new ExpressionException("Invalid infix expression: unknow token type");
+					}
+				}
+			}
+			tokenList.add(nextToken);
+			previousToken = nextToken;
+		}
+		
+		Expression.evaluateInfix(tokenList);
+		return tokenList;
+	}
+	
+	/**
 	 * Get infix token array list from infix string expression.
 	 * @param expression String expression
 	 * @return Tokenized infix list
 	 */
 	public static ArrayList<Token> getInfix(String expression) {
-		///
-		/// To be done
-		///
-		return new ArrayList<Token>();
+		return Expression.getInfix(expression, defaultOperatorList);
 	}
 	
+	/**
+	 * Convert from string expression to infix token list
+	 * @param expression String expression
+	 * @param operatorList A list of operators
+	 * @return Postfix token list
+	 */
+	public static ArrayList<Token> getPostfix(String expression, ArrayList<Operator> operatorList) {
+		expression = Token.removeIgnoreChars(expression);
+		Tokenizer tokenizer = new Tokenizer(expression, operatorList);
+		String[] tokens = tokenizer.getPostfixTokens();
+		ArrayList<Token> tokenList = new ArrayList<Token>();
+		if (!generateTokenList(tokens, 0, tokenList, operatorList)) {
+			throw new ExpressionException("Invalid postfix expression");
+		}
+		return tokenList;
+	}
 	/**
 	 * Get postfix token array list from postfix string expression. Delimitor is ','
 	 * @param expression Postfix string expression
 	 * @return Tokenized postfix list
 	 */
 	public static ArrayList<Token> getPostfix(String expression) {
-		/// 
-		/// To be done
-		///
-		return new ArrayList<Token>();
+		return Expression.getPostfix(expression, defaultOperatorList);
+	}
+	
+	/**
+	 * Test if tokens can generate a valid postfix expression
+	 * @param tokens Token array
+	 * @param start Starting index
+	 * @param tokenList Current tokenList
+	 * @param operatorList A list of operators
+	 * @return True if tokens can generate valid postfix expression. False otherwise.
+	 */
+	private static boolean generateTokenList(String[] tokens, int start, ArrayList<Token> tokenList, ArrayList<Operator> operatorList) {
+		// Processed all tokens, now try to evaluate
+		if (start == tokens.length) {
+			try {
+				Expression.evaluatePostfix(tokenList);
+				return true;
+			} catch (Exception e) {
+				return false;
+			}
+		}
+		boolean isOperator = false;
+		for (Operator op : operatorList) {
+			// This token is an operator
+			if (op.getName().equals(tokens[start])) {
+				isOperator = true;
+				tokenList.add(new Token(op));
+				if (generateTokenList(tokens, start + 1, tokenList, operatorList)) {
+					return true;
+				}
+				tokenList.remove(tokenList.size() - 1);
+			}
+		}
+		if (!isOperator) {
+			try {
+				Operand operand = new Operand(tokens[start]);
+				tokenList.add(new Token(operand));
+				if (!generateTokenList(tokens, start + 1, tokenList, operatorList)) {
+					tokenList.remove(tokenList.size() - 1);
+					return false;
+				}
+				return true;
+			} catch (Exception e) {
+				return false;
+			}
+		}
+		return false;
+	}
+	
+	/**
+	 * Covert infix string expression to postfix token list
+	 * @param expression Infix string expression
+	 * @param operatorList A list of operators
+	 * @return Postfix token list
+	 */
+	public static ArrayList<Token> infixToPostfix(String expression, ArrayList<Operator> operatorList) {
+		ArrayList<Token> infixList = Expression.getInfix(expression, operatorList);
+		return Expression.infixToPostfix(infixList);
 	}
 	
 	/**
 	 * Convert string infix to postfix tokenized list.
-	 * @param String expression Expression to be converted
+	 * @param expression Expression to be converted
 	 * @return postfix tokenized list
 	 */
 	public static ArrayList<Token> infixToPostfix(String expression) {
-		///
-		/// To be done
-		///
-		return new ArrayList<Token>();
+		return Expression.infixToPostfix(expression, defaultOperatorList);
 	}
 	
 	/**
@@ -200,27 +391,35 @@ public class Expression {
 	 * @return postfix tokenized list
 	 */
 	public static ArrayList<Token> infixToPostfix(ArrayList<Token> expression) {
-		///
-		/// To be done
-		///
+		
 		return new ArrayList<Token>();
 	}
 	
 	/**
-	 * Convert string postfix to tokenized infix.
-	 * @param String expression Expression to be converted
-	 * @return infix
+	 * Convert string infix to postfix tokenized list.
+	 * @param expression String expression Expression to be converted
+	 * @param operatorList A list of operators
+	 * @return Infix token list
 	 */
-	public static ArrayList<Token> postfixToInfix(String expression) {
-		/// 
+	public static ArrayList<Token> postfixToInfix(String expression, ArrayList<Operator> operatorList) {
+		///
 		/// TO BE DONE
 		///
 		return new ArrayList<Token>();
 	}
 	
 	/**
+	 * Convert string postfix to tokenized infix.
+	 * @param expression Expression to be converted
+	 * @return infix
+	 */
+	public static ArrayList<Token> postfixToInfix(String expression) {
+		return Expression.postfixToInfix(expression, Expression.defaultOperatorList);
+	}
+	
+	/**
 	 * Convert tokenized postfix to tokenized infix.
-	 * @param Tokenized expression Expression to be converted
+	 * @param expression Expression to be converted
 	 * @return infix
 	 */
 	public static ArrayList<Token> postfixToInfix(ArrayList<Token> expression) {
@@ -231,43 +430,63 @@ public class Expression {
 	}
 	
 	/**
-	 * Evaluate expression, default type is infix
-	 * @param expression Expression to be evaluated
-	 * @return
-	 * @throws ExpressionException 
+	 * Evaluate infix string expression
+	 * @param expression Infix string exprssion (default)
+	 * @param operatorList A list of operators
+	 * @return Operand
 	 */
-	public static Operand evaluate(String expression) throws ExpressionException {
-		return evaluate(expression, INFIX);
+	public static Operand evaluate(String expression, ArrayList<Operator> operatorList) {
+		return evaluate(expression, INFIX, operatorList);
 	}
 	
 	/**
-	 * Evaluate expression by given type
+	 * Evaluate expression, default type is infix
 	 * @param expression Expression to be evaluated
-	 * @param type Expression type, infix or postfix
-	 * @return
+	 * @return Operand
 	 * @throws ExpressionException 
 	 */
-	public static Operand evaluate(String expression, int type) {
+	public static Operand evaluate(String expression) throws ExpressionException {
+		return evaluate(expression, INFIX, defaultOperatorList);
+	}
+	
+	/**
+	 * Evaluate string expression based on type
+	 * @param expression String expression to be evaluated
+	 * @param type Expressoin type. Infix or postfix.
+	 * @param operatorList A list of operators.
+	 * @return Operand
+	 */
+	public static Operand evaluate(String expression, int type, ArrayList<Operator> operatorList) {
 		String postfix = Token.removeIgnoreChars(expression);
 		if (type == INFIX) {
-			ArrayList<Token> postfixList = Expression.infixToPostfix(postfix);
+			ArrayList<Token> postfixList = Expression.infixToPostfix(postfix, operatorList);
 			return Expression.evaluatePostfix(postfixList);
 		} else if (type == POSTFIX) {
-			return Expression.evaluatePostfix(postfix);
+			ArrayList<Token> postfixList = Expression.getPostfix(expression, operatorList);
+			return Expression.evaluatePostfix(postfixList);
 		} else {
 			throw new ExpressionException("Invalid expression type");
 		}
 	}
 	
 	/**
-	 * Evaluate postfix expression
-	 * @param postfix Postfix expression
-	 * @return Postfix expression value
+	 * Evaluate expression by given type
+	 * @param expression Expression to be evaluated
+	 * @param type Expression type, infix or postfix
+	 * @return Operand
 	 * @throws ExpressionException 
 	 */
-	private static Operand evaluatePostfix(String postfix) {
-		ArrayList<Token> postfixList = Expression.getPostfix(postfix);
-		return Expression.evaluatePostfix(postfixList);
+	public static Operand evaluate(String expression, int type) {
+		return Expression.evaluate(expression, type, defaultOperatorList);
+	}
+	
+	/**
+	 * Evaluate infix token list
+	 * @param infix Infix token list
+	 * @return Operand
+	 */
+	public static Operand evaluateInfix(ArrayList<Token> infix) {
+		return Expression.evaluatePostfix(Expression.infixToPostfix(infix));
 	}
 	
 	/**
@@ -339,6 +558,9 @@ public class Expression {
 		return true;
 	}
 	
+	/**
+	 * Add default operators
+	 */
 	private static void addDefaultOperators() {
 		Operator addOp = new Operator('+', false, true, 0, true, "Add operator");
 		addOp.addEvaluator(new Evaluator() {

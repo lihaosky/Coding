@@ -2,70 +2,138 @@ package Expression;
 
 import java.util.ArrayList;
 
+/**
+ * Tokenizer class
+ * @author lihaosky
+ *
+ */
 public class Tokenizer {
 	private String expression = "";
-	private int curIndex;
 	private ArrayList<Operator> operatorList = null;
 	
+	/**
+	 * Constructor
+	 * @param expression String expression
+	 */
 	public Tokenizer(String expression) {
 		this(expression, Expression.defaultOperatorList);
 	}
 	
+	/**
+	 * Constructor
+	 * @param expression String expression
+	 * @param operatorList A list of operators
+	 */
 	public Tokenizer(String expression, ArrayList<Operator> operatorList) {
 		this.expression = expression;
 		this.operatorList = operatorList;
-		curIndex = 0;
 	}
 	
-	public Token getNextToken() {
-		return new Token("");
+	/**
+	 * Get postfix tokens
+	 * @return Postfix tokens
+	 */
+	public String[] getPostfixTokens() {
+		return expression.split(",");
 	}
 	
-	public ArrayList<Token> getPostfixTokenList() {
-		String[] tokens = expression.split(",");
-		ArrayList<Token> tokenList = new ArrayList<Token>();
-		if (!generateTokenList(tokens, 0, tokenList)) {
-			throw new ExpressionException("Invalid postfix expression");
-		}
-		return tokenList;
-	}
-	
-	private boolean generateTokenList(String[] tokens, int start, ArrayList<Token> tokenList) {
-		// Processed all tokens, now try to evaluate
-		if (start == tokens.length) {
-			try {
-				Expression.evaluatePostfix(tokenList);
-				return true;
-			} catch (Exception e) {
-				return false;
-			}
-		}
-		boolean isOperator = false;
+	/**
+	 * If the string is an operator
+	 * @param c String to be tested
+	 * @return True if it's operator, False otherwise
+	 */
+	public boolean isOperator(String c) {
 		for (Operator op : operatorList) {
-			// This token is an operator
-			if (op.getName().equals(tokens[start])) {
-				isOperator = true;
-				tokenList.add(new Token(op));
-				if (generateTokenList(tokens, start + 1, tokenList)) {
-					return true;
-				}
-				tokenList.remove(tokenList.size() - 1);
-			}
-		}
-		if (!isOperator) {
-			try {
-				Operand operand = new Operand(tokens[start]);
-				tokenList.add(new Token(operand));
-				if (!generateTokenList(tokens, start + 1, tokenList)) {
-					tokenList.remove(tokenList.size() - 1);
-					return false;
-				}
+			if (op.getName().equals(c)) {
 				return true;
-			} catch (Exception e) {
-				return false;
 			}
 		}
 		return false;
 	}
+	
+	/**
+	 * Get unary operator with this name
+	 * @param s Name
+	 * @return Unary operator. null if not exist
+	 */
+	public Operator getUnary(String s) {
+		for (Operator op : operatorList) {
+			if (op.getName().equals(s) && op.isUnary()) {
+				return op;
+			}
+		}
+		return null;
+	}
+	
+	/**
+	 * Get binary operator with this name
+	 * @param s Name
+	 * @return binary operator. null if not exist
+	 */
+	public Operator getBinary(String s) {
+		for (Operator op : operatorList) {
+			if (op.getName().equals(s) && op.isBinary()) {
+				return op;
+			}
+		}
+		return null;
+	}
+	
+	/**
+	 * Test if string is a unary operator
+	 * @param s String to be tested
+	 * @return True if it is. False otherwise
+	 */
+	public boolean isUnaryOperator(String s) {
+		for (Operator op : operatorList) {
+			if (op.getName().equals(s) && op.isUnary()) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	/**
+	 * Test if string is a binary operator
+	 * @param s String to be tested
+	 * @return True if it is. False otherwise
+	 */
+	public boolean isBinaryOperator(String s) {
+		for (Operator op : operatorList) {
+			if (op.getName().equals(s) && op.isBinary()) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	/**
+	 * Get infix tokens
+	 * @return Infix tokens
+	 */
+	public String[] getInfixTokens() {
+		ArrayList<String> tokens = new ArrayList<String>();
+		
+		for (int i = 0; i < expression.length(); i++) {
+			if (expression.charAt(i) == '(' || expression.charAt(i) == ')' || isOperator(expression.charAt(i) + "")) {
+				tokens.add(expression.charAt(i) + "");
+				continue;
+			} else {
+				String s = "";
+				while (i < expression.length() && expression.charAt(i) != '('
+						                       && expression.charAt(i) != ')'
+						                       && !isOperator(expression.charAt(i) + "")) {
+					s += expression.charAt(i);
+					i++;
+				}
+				i--;
+				tokens.add(s);
+			}
+		}
+		
+		return (String[])tokens.toArray();
+	}
+	
+
 	
 }
