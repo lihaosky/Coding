@@ -23,6 +23,14 @@ public class Main {
 		System.out.println(Expression.evaluateInfix("2+3*45").getValue());
 		System.out.println(Expression.evaluateInfix("2+-3*10").getValue());
 		System.out.println(Expression.evaluateInfix("2.4*(10+1)++3").getValue());
-		
+		Token.printTokenList(Expression.postfixToInfix("2,3,-"));
+		Token.printTokenList(Expression.postfixToInfix("2,3,-,4,*"));
+		Token.printTokenList(Expression.postfixToInfix("2,3,-,4,5,+,*"));
+		Token.printTokenList(Expression.postfixToInfix("2,3,-,4,-"));
+		Token.printTokenList(Expression.postfixToInfix("2,3,-,4,5,*,-"));
+		Token.printTokenList(Expression.postfixToInfix("2,3,-,4,5,+,*,-"));
+		Token.printTokenList(Expression.postfixToInfix("1,2,+,2,2,+,4,+,*,1,2,+,3,+,2,^,*"));
+		System.out.println(Expression.evaluatePostfix("1,2,+,2,2,+,4,+,*,1,2,+,3,+,2,^,*").getValue());
+		Token.printTokenList(Expression.postfixToInfix(""));
 	}
 }

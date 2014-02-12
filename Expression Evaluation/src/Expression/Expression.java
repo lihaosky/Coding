@@ -467,10 +467,8 @@ public class Expression {
 	 * @return Infix token list
 	 */
 	public static ArrayList<Token> postfixToInfix(String expression, ArrayList<Operator> operatorList) {
-		///
-		/// TO BE DONE
-		///
-		return new ArrayList<Token>();
+		ArrayList<Token> postfixList = Expression.getPostfix(expression, operatorList);
+		return Expression.postfixToInfix(postfixList);
 	}
 	
 	/**
@@ -488,10 +486,93 @@ public class Expression {
 	 * @return infix
 	 */
 	public static ArrayList<Token> postfixToInfix(ArrayList<Token> expression) {
-		/// 
-		/// TO BE DONE
-		///
-		return new ArrayList<Token>();
+		Stack<ArrayList<Token>> stack = new Stack<ArrayList<Token>>();
+		for (Token token : expression) {
+			if (token.getType() == Token.OPERAND) {
+				ArrayList<Token> tokenList = new ArrayList<Token>();
+				tokenList.add(token);
+				stack.push(tokenList);
+			} else if (token.getType() == Token.OPERATOR) {
+				if (token.getOperator().isBinary()) {
+					if (stack.size() < 2) {
+						throw new ExpressionException("Invalid expression: too few operands");
+					}
+					ArrayList<Token> rightOperands = stack.pop();
+					ArrayList<Token> leftOperands = stack.pop();
+					boolean needBracket = false;
+					boolean inBracket = false;
+					for (Token t : leftOperands) {
+						if (t.getType() == Token.OPERATOR && !inBracket && token.getOperator().compareTo(t.getOperator()) > 0) {
+							needBracket = true;
+							break;
+						} else if (t.getType() == Token.LEFTBRACE) {
+							inBracket = true;
+						} else if (t.getType() == Token.RIGHTBRACE) {
+							inBracket = false;
+						}
+					}
+					if (needBracket) {
+						leftOperands.add(new Token(")"));
+						leftOperands.add(0, new Token("("));
+					}
+					needBracket = false;
+					inBracket = false;
+					for (Token t : rightOperands) {
+						if (t.getType() == Token.OPERATOR && !inBracket && token.getOperator().compareTo(t.getOperator()) > 0) {
+							needBracket = true;
+							break;
+						} else if (t.getType() == Token.LEFTBRACE) {
+							inBracket = true;
+						} else if (t.getType() == Token.RIGHTBRACE) {
+							inBracket = false;
+						}
+					}
+					if (needBracket) {
+						rightOperands.add(new Token(")"));
+						rightOperands.add(0, new Token("("));
+					}
+					ArrayList<Token> newList = new ArrayList<Token>();
+					newList.addAll(leftOperands);
+					newList.add(token);
+					newList.addAll(rightOperands);
+					stack.push(newList);
+				} else if (token.getOperator().isUnary()){
+					if (stack.size() < 1) {
+						throw new ExpressionException("Invalid expression: too few operands");
+					}
+					ArrayList<Token> leftOperands = stack.pop();
+					boolean needBracket = false;
+					boolean inBracket = false;
+					for (Token t : leftOperands) {
+						if (t.getType() == Token.OPERATOR && !inBracket && token.getOperator().compareTo(t.getOperator()) > 0) {
+							needBracket = true;
+							break;
+						} else if (t.getType() == Token.LEFTBRACE) {
+							inBracket = true;
+						} else if (t.getType() == Token.RIGHTBRACE) {
+							inBracket = false;
+						}
+					}
+					if (needBracket) {
+						leftOperands.add(new Token(")"));
+						leftOperands.add(0, new Token("("));
+					}
+					ArrayList<Token> newList = new ArrayList<Token>();
+					newList.add(0, token);
+					newList.addAll(leftOperands);
+					stack.push(newList);
+				}
+			} else if (token.getType() == Token.LEFTBRACE || token.getType() == Token.RIGHTBRACE) {
+				throw new ExpressionException("Invalid expression: bracket in postfix expression");
+			} else {
+				throw new ExpressionException("Unknown token type");
+			}
+		}
+		
+		if (stack.size() != 1) {
+			throw new ExpressionException("Invalid expression");
+		}
+		return stack.pop();
 	}
 	
 	/**
