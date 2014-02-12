@@ -131,7 +131,8 @@ public class Tokenizer {
 			}
 		}
 		
-		return (String[])tokens.toArray();
+		String[] tokenArray = new String[tokens.size()];
+		return tokens.toArray(tokenArray);
 	}
 	
 

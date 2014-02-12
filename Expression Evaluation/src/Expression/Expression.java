@@ -44,7 +44,7 @@ public class Expression {
 	private ArrayList<Token> infix = null;
 	private ArrayList<Token> postfix = null;
 	private int type = Expression.INFIX;
-	private String value = "";
+	private Operand value = null;
 	private ArrayList<Operator> operatorList = null;
 	
 	/**
@@ -77,7 +77,7 @@ public class Expression {
 		pureExpression = Token.removeIgnoreChars(expression);
 		infix = Expression.getInfix(pureExpression);
 		postfix = Expression.infixToPostfix(infix);
-		value = Expression.evaluatePostfix(postfix) + "";
+		value = Expression.evaluatePostfix(postfix);
 		this.operatorList = Expression.defaultOperatorList;
 	}
 	
@@ -95,13 +95,13 @@ public class Expression {
 		if (this.type == Expression.INFIX) {
 			infix = Expression.getInfix(pureExpression);
 			postfix = Expression.infixToPostfix(infix);
-			value = Expression.evaluatePostfix(postfix) + "";
+			value = Expression.evaluatePostfix(postfix);
 		} else if (this.type == Expression.POSTFIX) {
 			postfix = Expression.getPostfix(pureExpression);
 			infix = Expression.postfixToInfix(postfix);
-			value = Expression.evaluatePostfix(postfix) + "";
+			value = Expression.evaluatePostfix(postfix);
 		} else {
-			throw new ExpressionException("Invalid expression type");
+			throw new ExpressionException(ExpressionException.invalidExpressMessage("Unknown type"));
 		}
 		this.operatorList = Expression.defaultOperatorList;
 	}
@@ -117,17 +117,17 @@ public class Expression {
 		pureExpression = Token.removeIgnoreChars(expression);
 		this.type = type;
 		if (this.type == Expression.INFIX) {
-			infix = Expression.getInfix(pureExpression);
+			infix = Expression.getInfix(pureExpression, operatorList);
 			postfix = Expression.infixToPostfix(infix);
-			value = Expression.evaluatePostfix(postfix) + "";
+			value = Expression.evaluatePostfix(postfix);
 			this.operatorList = operatorList;
 		} else if (this.type == Expression.POSTFIX) {
-			postfix = Expression.getPostfix(pureExpression);
+			postfix = Expression.getPostfix(pureExpression, operatorList);
 			infix = Expression.postfixToInfix(postfix);
-			value = Expression.evaluatePostfix(postfix) + "";
+			value = Expression.evaluatePostfix(postfix);
 			this.operatorList = operatorList;
 		} else {
-			throw new ExpressionException("Invalid expression type");
+			throw new ExpressionException(ExpressionException.invalidExpressMessage("Unknown type"));
 		}
 	}
 	
@@ -140,9 +140,9 @@ public class Expression {
 		// Remove all the spaces
 		this.expression = expression;
 		pureExpression = Token.removeIgnoreChars(expression);
-		infix = Expression.getInfix(pureExpression);
+		infix = Expression.getInfix(pureExpression, operatorList);
 		postfix = Expression.infixToPostfix(infix);
-		value = Expression.evaluatePostfix(postfix) + "";
+		value = Expression.evaluatePostfix(postfix);
 		this.operatorList = operatorList;
 	}
 	
@@ -150,8 +150,8 @@ public class Expression {
 	 * Evaluate the stored expression.
 	 * @return Double value of expression
 	 */
-	public double evaluate() {
-		return Double.parseDouble(value);
+	public Operand evaluate() {
+		return value;
 	}
 	
 	/**
@@ -199,15 +199,15 @@ public class Expression {
 				} else {
 					switch (previousToken.getType()) {
 					case Token.OPERAND:
-						throw new ExpressionException("Invalid infix expression: \"(\" after operand");
+						throw new ExpressionException(ExpressionException.invalidExpressMessage("\"(\" after operand"));
 					case Token.RIGHTBRACE:
-						throw new ExpressionException("Invalid infix expression: \"(\" after \")\"");
+						throw new ExpressionException(ExpressionException.invalidExpressMessage("\"(\" after \")\""));
 					case Token.OPERATOR:
 					case Token.LEFTBRACE:
 						nextToken = new Token("(");
 						break;
 					default:
-						throw new ExpressionException("Invalid infix expression: unknow token type");
+						throw new ExpressionException(ExpressionException.invalidExpressMessage("unknow token type"));
 					}
 				}
 			} else if (token.equals(")")) {
@@ -216,15 +216,15 @@ public class Expression {
 				} else {
 					switch (previousToken.getType()) {
 					case Token.LEFTBRACE:
-						throw new ExpressionException("Invalid infix expression: \")\" after \"(\"");
+						throw new ExpressionException(ExpressionException.invalidExpressMessage("\")\" after \"(\""));
 					case Token.OPERATOR:
-						throw new ExpressionException("Invalid infix expression: \")\" after operator");
+						throw new ExpressionException(ExpressionException.invalidExpressMessage("\")\" after operator"));
 					case Token.OPERAND:
 					case Token.RIGHTBRACE:
 						nextToken = new Token(")");
 						break;
 					default:
-						throw new ExpressionException("Invalid infix expression: unknow token type");
+						throw new ExpressionException(ExpressionException.invalidExpressMessage("unknow token type"));
 					}
 				}
 			} else if (tokenizer.isOperator(token)) {
@@ -232,7 +232,7 @@ public class Expression {
 				if (previousToken == null) {
 					Operator op = tokenizer.getUnary(token);
 					if (op == null) {
-						throw new ExpressionException("Invalid infix expression: leading binary operator");
+						throw new ExpressionException(ExpressionException.invalidExpressMessage("leading binary operator"));
 					}
 					nextToken = new Token(op);
 				} else {
@@ -242,7 +242,7 @@ public class Expression {
 					case Token.RIGHTBRACE:
 						op = tokenizer.getBinary(token);
 						if (op == null) {
-							throw new ExpressionException("Invalid infix expression: Unary operator after operand");
+							throw new ExpressionException(ExpressionException.invalidExpressMessage("Unary operator after operand"));
 						}
 						nextToken = new Token(op);
 						break;
@@ -250,12 +250,12 @@ public class Expression {
 					case Token.OPERATOR:
 						op = tokenizer.getUnary(token);
 						if (op == null) {
-							throw new ExpressionException("Invalid infix expression: Binary operator after operator");
+							throw new ExpressionException(ExpressionException.invalidExpressMessage("Binary operator after operator"));
 						}
 						nextToken = new Token(op);
 						break;
 					default:
-						throw new ExpressionException("Invalid infix expression: unknow token type");
+						throw new ExpressionException(ExpressionException.invalidExpressMessage("unknow token type"));
 					}
 				}
 			} else {
@@ -265,15 +265,15 @@ public class Expression {
 				} else {
 					switch (previousToken.getType()) {
 					case Token.OPERAND:
-						throw new ExpressionException("Invalid infix expression: operand after operand");
+						throw new ExpressionException(ExpressionException.invalidExpressMessage("operand after operand"));
 					case Token.RIGHTBRACE:
-						throw new ExpressionException("Invalid infix expression: operand after right brace");
+						throw new ExpressionException(ExpressionException.invalidExpressMessage("operand after right brace"));
 					case Token.LEFTBRACE:
 					case Token.OPERATOR:
 						nextToken = new Token(operand);
 						break;
 					default:
-						throw new ExpressionException("Invalid infix expression: unknow token type");
+						throw new ExpressionException(ExpressionException.invalidExpressMessage("unknow token type"));
 					}
 				}
 			}
@@ -306,7 +306,7 @@ public class Expression {
 		String[] tokens = tokenizer.getPostfixTokens();
 		ArrayList<Token> tokenList = new ArrayList<Token>();
 		if (!generateTokenList(tokens, 0, tokenList, operatorList)) {
-			throw new ExpressionException("Invalid postfix expression");
+			throw new ExpressionException(ExpressionException.invalidExpressMessage("Can't generate postfix expression"));
 		}
 		return tokenList;
 	}
@@ -391,8 +391,73 @@ public class Expression {
 	 * @return postfix tokenized list
 	 */
 	public static ArrayList<Token> infixToPostfix(ArrayList<Token> expression) {
+		Stack<Token> operatorStack = new Stack<Token>();
+		ArrayList<Token> postfixList = new ArrayList<Token>();
 		
-		return new ArrayList<Token>();
+		for (Token token : expression) {
+			if (token.getType() == Token.OPERAND) {
+				postfixList.add(token);
+			} else if (token.getType() == Token.LEFTBRACE) {
+				operatorStack.push(token);
+			} else if (token.getType() == Token.OPERATOR) {
+				while (operatorStack.size() > 0) {
+					Token topToken = operatorStack.peek();
+					if (topToken.getType() == Token.OPERAND) {
+						throw new ExpressionException("Operand shouldn't be in operator stack");
+					} else if (topToken.getType() == Token.LEFTBRACE || topToken.getType() == Token.RIGHTBRACE) {
+						break;
+					} else if (topToken.getType() == Token.OPERATOR) {
+						if (token.getOperator().compareTo(topToken.getOperator()) > 0) {
+							break;
+						} else if (token.getOperator().compareTo(topToken.getOperator()) < 0) {
+							topToken = operatorStack.pop();
+							postfixList.add(topToken);
+						} else {
+							if (!topToken.getOperator().isLeftAssociative()) {
+								break;
+							} else {
+								topToken = operatorStack.pop();
+								postfixList.add(topToken);
+							}
+						}
+					} else {
+						throw new ExpressionException("Unknow token in operator stack");
+					}
+				}
+				operatorStack.push(token);
+			} else if (token.getType() == Token.RIGHTBRACE) {
+				boolean found = false;
+				while (operatorStack.size() > 0 && found == false) {
+					Token topToken = operatorStack.pop();
+					if (topToken.getType() == Token.LEFTBRACE) {
+						found = true;
+					} else if (topToken.getType() == Token.OPERATOR){
+						postfixList.add(topToken);
+					} else {
+						throw new ExpressionException("Invalid token in operator stack");
+					}
+				}
+				if (!found) {
+					throw new ExpressionException("Invalid infix expression: unmatched bracket");
+				}
+			} else {
+				throw new ExpressionException("Unknown token in expression: \"" + token.getName() + "\"");
+			}
+		}
+		
+		while (operatorStack.size() > 0) {
+			Token topToken = operatorStack.pop();
+			if (topToken.getType() == Token.LEFTBRACE) {
+				throw new ExpressionException("Invalid infix expression: unmatched bracket");
+			} else if (topToken.getType() == Token.OPERAND) {
+				throw new ExpressionException("Operand in operator stack");
+			} else if (topToken.getType() == Token.OPERATOR) {
+				postfixList.add(topToken);
+			} else {
+				throw new ExpressionException("Unknown token in expression: \"" + topToken.getName() + "\"");
+			}
+		}
+		return postfixList;
 	}
 	
 	/**
@@ -430,23 +495,41 @@ public class Expression {
 	}
 	
 	/**
-	 * Evaluate infix string expression
-	 * @param expression Infix string exprssion (default)
+	 * Evaluate infix string expression with operator list
+	 * @param expression Infix string expression (default)
 	 * @param operatorList A list of operators
 	 * @return Operand
 	 */
-	public static Operand evaluate(String expression, ArrayList<Operator> operatorList) {
+	public static Operand evaluateInfix(String expression, ArrayList<Operator> operatorList) {
 		return evaluate(expression, INFIX, operatorList);
 	}
 	
 	/**
-	 * Evaluate expression, default type is infix
+	 * Evaluate infix string expression
 	 * @param expression Expression to be evaluated
 	 * @return Operand
-	 * @throws ExpressionException 
 	 */
-	public static Operand evaluate(String expression) throws ExpressionException {
+	public static Operand evaluateInfix(String expression) {
 		return evaluate(expression, INFIX, defaultOperatorList);
+	}
+	
+	/**
+	 * Evaluate postfix expression with operator list
+	 * @param expression Expression to be evaluated
+	 * @param operatorList Operator list
+	 * @return Operand
+	 */
+	public static Operand evaluatePostfix(String expression, ArrayList<Operator> operatorList) {
+		return evaluate(expression, POSTFIX, operatorList);
+	}
+	
+	/**
+	 * Evaluate postfix expression
+	 * @param expression Expression to be evaluated
+	 * @return Operand
+	 */
+	public static Operand evaluatePostfix(String expression) {
+		return evaluate(expression, POSTFIX, Expression.defaultOperatorList);
 	}
 	
 	/**
@@ -456,7 +539,7 @@ public class Expression {
 	 * @param operatorList A list of operators.
 	 * @return Operand
 	 */
-	public static Operand evaluate(String expression, int type, ArrayList<Operator> operatorList) {
+	private static Operand evaluate(String expression, int type, ArrayList<Operator> operatorList) {
 		String postfix = Token.removeIgnoreChars(expression);
 		if (type == INFIX) {
 			ArrayList<Token> postfixList = Expression.infixToPostfix(postfix, operatorList);
@@ -509,7 +592,7 @@ public class Expression {
 						Token t = new Token(token.getOperator().evaluate(t2.getOperand(), t1.getOperand()));
 						stack.push(t);
 					} catch (Exception e) {
-						throw new ExpressionException("Invalid postfix expression");
+						throw new ExpressionException("Invalid expression: too few operands");
 					}
 				} else if (token.getOperator().isUnary()) {
 					try {
@@ -517,7 +600,7 @@ public class Expression {
 						Token t = new Token(token.getOperator().evaluate(t1.getOperand()));
 						stack.push(t);
 					} catch (Exception e) {
-						throw new ExpressionException("Invalid postfix expression");
+						throw new ExpressionException("Invalid expression");
 					}
 				} else {
 					throw new ExpressionException("Invalid postfix expression");
@@ -539,9 +622,11 @@ public class Expression {
 	 * @return True if it is valid infix expression, otherwise false
 	 */
 	public static boolean isInfix(String expression) {
-		/// 
-		/// TO BE DONE
-		///
+		try {
+			Expression.evaluateInfix(expression);
+		} catch (ExpressionException e) {
+			return false;
+		}
 		return true;
 	}
 	
@@ -552,9 +637,11 @@ public class Expression {
 	 * @return True if it is valid postfix expression, otherwise false
 	 */
 	public static boolean isPostfix(String expression) {
-		///
-		/// TO BE DONE
-		///
+		try {
+			Expression.evaluatePostfix(expression);
+		} catch (ExpressionException e) {
+			return false;
+		}
 		return true;
 	}
 	
