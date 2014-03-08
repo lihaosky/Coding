@@ -117,5 +117,17 @@ public class Solution {
 			}
 			System.out.println();
 		}
+		String s = "";
+		String[] splitString = s.split(" ");
+		System.out.println(splitString.length);
+		for (String string : splitString) {
+			if (string.equals("")) {
+				System.out.print("YES");
+			}
+			System.out.print(string);
+		}
+		boolean matches = "a".matches("");
+		System.out.println(matches);
+		"abcd".substring(4);
 	}
 }
