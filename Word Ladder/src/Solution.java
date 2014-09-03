@@ -98,7 +98,6 @@ public class Solution {
 		set.add("lot");
 		
 		System.out.println(new Solution().ladderLength("hit", "cog", set));
-		
 	}
 	
 }
