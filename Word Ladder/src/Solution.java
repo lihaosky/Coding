@@ -82,10 +82,7 @@ public class Solution {
 				isDiff = true;
 			}
 		}
-		if (isDiff) {
-			return true;
-		}
-		return false;
+		return isDiff;
 	}
 	
 	
