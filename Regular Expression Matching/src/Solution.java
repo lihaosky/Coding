@@ -187,13 +187,50 @@ public class Solution {
     	return transitionMap;
     }
     
+    public boolean isMatch3(String s, String p) {
+    	if (s.length() == 0 && p.length() == 0) {
+    		return true;
+    	}
+    	if (p.length() == 0) {
+    		return false;
+    	}
+    	if (p.length() > 1 && p.charAt(1) == '*') {
+    		if (isMatch3(s.substring(0), p.substring(2))) {
+    			return true;
+    		}
+    		for (int i = 1; i <= s.length(); i++) {
+    			if (p.charAt(0) != '.' && p.charAt(0) != s.charAt(i - 1)) {
+    				break;
+    			}
+    			if (isMatch3(s.substring(i), p.substring(2))) {
+    				return true;
+    			}
+    		}
+    		return false;
+    	} else {
+    		if (s.length() == 0) {
+    			return false;
+    		}
+    		if (p.charAt(0) != '.' && p.charAt(0) != s.charAt(0)) {
+    			return false;
+    		}
+    		return isMatch3(s.substring(1), p.substring(1));
+    	}
+    }
+    
 	public static void main(String[] args) {
-		System.out.println(new Solution().isMatch("aaa", "c*a*aaa"));
+/*		System.out.println(new Solution().isMatch("aaa", "c*a*aaa"));
 		System.out.println(new Solution().isMatch("aaa", "ab*a"));
 		System.out.println(new Solution().isMatch("   ", ".*"));
 		System.out.println(new Solution().isMatch1("aaa", "c*a*aaa"));
 		System.out.println(new Solution().isMatch1("aaa", "ab*a"));
 		System.out.println(new Solution().isMatch1("   ", ".*"));
-		System.out.println("a".substring(1));
+		System.out.println(new Solution().isMatch3("aaa", "c*a*aaa"));
+		System.out.println(new Solution().isMatch3("aaa", "ab*a"));
+		System.out.println(new Solution().isMatch3("   ", ".*"));*/
+		System.out.println(new Solution().isMatch3("aaa", "c*a*aaa"));
+		System.out.println(new Solution().isMatch3("aaa", "ab*a"));
+		System.out.println(new Solution().isMatch3("   ", ".*"));
+		System.out.println("".substring(0));
 	}
 }
