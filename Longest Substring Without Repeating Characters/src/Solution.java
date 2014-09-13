@@ -13,6 +13,31 @@
  *
  */
 public class Solution {
+	public int lengthOfLongestSubstring1(String s) {
+        int max = 0, curLen = 0;
+        int[] appear = new int[150];
+        
+        for (int i = 0; i < s.length(); i++) {
+            char c = s.charAt(i);
+            if (appear[c] == 0) {
+                appear[c] = i + 1;
+                curLen++;
+                if (curLen > max) {
+                    max = curLen;
+                }
+            } else {
+                int start = appear[c] - 1;
+                appear = new int[150];
+                for (int j = start + 1; j <= i; j++) {
+                    appear[s.charAt(j)] = j + 1;
+                }
+                curLen = i - start;
+            }
+        }
+        
+        return max;
+	}
+	
     public int lengthOfLongestSubstring(String s) {
        if (s.length() == 0) {
     	   return 0;
@@ -53,5 +78,7 @@ public class Solution {
     	System.out.println(new Solution().lengthOfLongestSubstring(s));
     	System.out.println(new Solution().lengthOfLongestSubstring(s1));
     	System.out.println(new Solution().lengthOfLongestSubstring(s2));
+    	boolean a = false;
+    	System.out.println(!a);
     }
 }
