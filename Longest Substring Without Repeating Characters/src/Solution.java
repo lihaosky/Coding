@@ -70,6 +70,7 @@ public class Solution {
        return maxLength;
     }
     
+    
     public static void main(String[] args) {
     	String s = "abcabcbb";
     	String s1 = "bbbb";
@@ -80,5 +81,11 @@ public class Solution {
     	System.out.println(new Solution().lengthOfLongestSubstring(s2));
     	boolean a = false;
     	System.out.println(!a);
+    	System.out.println("abcd".substring(4));
+    	
+    	char[] c = {'I'};
+    	String a1 = "";
+    	a1 = c[0] + a1;
+    	System.out.println(a1);
     }
 }
