@@ -20,11 +20,8 @@ public class Solution {
 		if (node1 == null || node2 == null || root == null) {
 			return null;
 		}
-		if (root == node1) {
-			return node1;
-		}
-		if (root == node2) {
-			return node2;
+		if (root == node1 || root == node2) {
+			return root;
 		}
 		TreeNode left = findCommonAncestor(root.left, node1, node2);
 		TreeNode right = findCommonAncestor(root.right, node1, node2);
