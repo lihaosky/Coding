@@ -4,6 +4,47 @@
  *
  */
 public class Solution {
+    public static int divide2(int dividend, int divisor) {
+        if (dividend == 0) {
+            return 0;
+        }
+        if (divisor == 1) {
+            return dividend;
+        }
+        boolean neg = false;
+        if (dividend < 0 && divisor > 0) {
+            neg = true;
+        }
+        if (dividend > 0 && divisor < 0) {
+            neg = true;
+        }
+        long longDividend = (long)Math.abs(dividend);
+        int longDivisor = Math.abs(divisor);
+        System.out.println(longDividend);
+        System.out.println(longDivisor);
+        
+        if (longDividend < longDivisor) {
+            return 0;
+        }
+        long res = 0;
+        while (longDividend >= longDivisor) {
+            long mul = 1;
+            long tmpDivisor = longDivisor;
+            while (tmpDivisor <= longDividend) {
+                mul = mul << 1;
+                tmpDivisor = tmpDivisor << 1;
+            }
+            mul = mul >> 1;
+            tmpDivisor = tmpDivisor >> 1;
+            longDividend -= tmpDivisor;
+            res += mul;
+        }
+        if (neg) {
+            return (int)-res;
+        }
+        return (int)res;
+    }
+    
     public int divide(int dividend, int divisor) {
         int sign = 1;
         if ((dividend < 0 && divisor > 0) || (dividend > 0 && divisor < 0)) {
@@ -38,6 +79,6 @@ public class Solution {
     public static void main(String[] args) {
     	
     	System.out.println(-1010369383/-2147483648);
-    	System.out.println(new Solution().divide(-1010369383, -2147483648));
+    	System.out.println(new Solution().divide2(-1010369383, -2147483648));
     }
 }
