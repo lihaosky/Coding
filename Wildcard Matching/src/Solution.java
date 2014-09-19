@@ -36,6 +36,35 @@ class State {
 }
 
 public class Solution {
+	public boolean isMatch4(String s, String p) {
+	    int starPos = -1, matchPos = -1, i = 0, j = 0;
+	    while (i < s.length()) {
+	        if (j < p.length() && p.charAt(j) == '*') {
+	            starPos = j;
+	            matchPos = i;
+	            j++;
+	        } else {
+	            if (j < p.length() && (p.charAt(j) == '?' || p.charAt(j) == s.charAt(i))) {
+	                i++;
+	                j++;
+	            } else {
+	                if (starPos == -1) {
+	                    return false;
+	                }
+	                j = starPos + 1;
+	                matchPos++;
+	                i = matchPos;
+	            }
+	        }
+	    }
+	    for (; j < p.length(); j++) {
+	        if (p.charAt(j) != '*') {
+	            return false;
+	        }
+	    }
+	    return true;
+	}
+	
 	public boolean isMatch1(String s, String p) {
 		if (s.length() == 0 && p.length() == 0) {
 			return true;
