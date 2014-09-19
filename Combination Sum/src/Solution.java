@@ -1,5 +1,6 @@
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.*;
 
 /**
  *  Given a set of candidate numbers (C) and a target number (T), find all unique combinations in C where the candidate numbers sums to T.
@@ -20,6 +21,33 @@ A solution set is:
  *
  */
 public class Solution {
+    public List<List<Integer>> combinationSum1(int[] candidates, int target) {
+        List<List<Integer>> res = new ArrayList<List<Integer>>();
+        List<Integer> list = new ArrayList<Integer>();
+        Arrays.sort(candidates);
+        solve(candidates, 0, target, list, res);
+        return res;
+    }
+    
+    public void solve(int[] candidates, int start, int target, List<Integer> list, List<List<Integer>> res) {
+        if (target == 0) {
+            res.add(list);
+            return;
+        }
+        if (start >= candidates.length) {
+            return;
+        }
+        
+        for (int i = 0; i * candidates[start] <= target; i++) {
+            List<Integer> l = new ArrayList<Integer>();
+            l.addAll(list);
+            for (int j = 0; j < i; j++) {
+                l.add(candidates[start]);
+            }
+            solve(candidates, start + 1, target - candidates[start] * i, l, res);
+        }
+    }
+    
     public ArrayList<ArrayList<Integer>> combinationSum(int[] candidates, int target) {
     	ArrayList<ArrayList<Integer>> solutionList = new ArrayList<ArrayList<Integer>>();
     	if (candidates == null || candidates.length == 0) {

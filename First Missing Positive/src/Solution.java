@@ -35,5 +35,6 @@ public class Solution {
     	int[] array1 = {3, 4, -1, 1};
     	System.out.println(new Solution().firstMissingPositive(array));
     	System.out.println(new Solution().firstMissingPositive(array1));
+    	for (int i = 0; i < 100; i++);
     }
 }

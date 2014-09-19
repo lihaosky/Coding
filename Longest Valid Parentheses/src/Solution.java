@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 import java.util.Stack;
 
 /**
@@ -41,6 +42,27 @@ public class Solution {
     	return maxLen;
     }
     
+    public int longestValidParentheses1(String s) {
+        int max = 0;
+        Stack<Integer> stack = new Stack<Integer>();
+        int[] len = new int[s.length() + 1];
+        
+        for (int i = 0; i < s.length(); i++) {
+            if (s.charAt(i) == '(') {
+                stack.push(i);
+            } else {
+                if (!stack.empty()) {
+                    int match = stack.pop();
+                    len[i + 1] = len[match] + i - match + 1;
+                    if (len[i + 1] > max) {
+                        max = len[i + 1];
+                    }
+                }
+            }
+        }
+        return max;
+    }
+    
     public static void main(String[] args) {
     	System.out.println(new Solution().longestValidParentheses("(()"));
     	System.out.println(new Solution().longestValidParentheses("(())"));
@@ -48,5 +70,11 @@ public class Solution {
     	System.out.println(new Solution().longestValidParentheses("("));
     	System.out.println(new Solution().longestValidParentheses("(((())))"));
     	System.out.println(new Solution().longestValidParentheses(")())"));
+    	
+    	char c = '9';
+    	c = (char) (c - 8);
+    	System.out.println(c);
+    	ArrayList<Integer> a = new ArrayList<Integer>();
+    	a.addAll(null);
     }
 }

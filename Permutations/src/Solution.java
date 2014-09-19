@@ -1,5 +1,5 @@
 import java.util.ArrayList;
-
+import java.util.*;
 /**
  *  Given a collection of numbers, return all possible permutations.
 
@@ -10,6 +10,35 @@ For example,
  *
  */
 public class Solution {
+    public List<List<Integer>> permute1(int[] num) {
+        List<List<Integer>> res = new ArrayList<List<Integer>>();
+        solve(num, 0, res);
+        return res;
+    }
+    
+    public void swap(int[] num, int i, int j) {
+        int tmp = num[i];
+        num[i] = num[j];
+        num[j] = tmp;
+    }
+    
+    public void solve(int[] num, int start, List<List<Integer>> res) {
+        if (start >= num.length) {
+            List<Integer> l = new ArrayList<Integer>();
+            for (int i = 0; i < num.length; i++) {
+                l.add(num[i]);
+            }
+            res.add(l);
+            return;
+        }
+        for (int i = start; i < num.length; i++) {
+            swap(num, start, i);
+            solve(num, start + 1, res);
+            swap(num, start, i);
+        }
+        return;
+    }
+    
 	public ArrayList<ArrayList<Integer>> permute(int[] num) {
 		ArrayList<ArrayList<Integer>> sol = new ArrayList<ArrayList<Integer>>();
 		ArrayList<Integer> tmpList = new ArrayList<Integer>();
