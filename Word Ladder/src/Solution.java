@@ -1,7 +1,7 @@
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.Queue;
-
+import java.util.*;
 /**
  *  Given two words (start and end), and a dictionary, find the length of shortest transformation sequence from start to end, such that:
 
@@ -28,6 +28,49 @@ Note:
  *
  */
 public class Solution {
+    public int ladderLength(String start, String end, Set<String> dict) {
+        int len = 1, curLayer = 1, nextLayer = 0;
+        Set<String> visited = new HashSet<String>();
+        Queue<String> queue = new LinkedList<String>();
+        queue.add(start);
+        visited.add(start);
+        while (!queue.isEmpty()) {
+            String s = queue.remove();
+            curLayer--;
+            Set<String> neighbors = neighbors(s);
+            for (String neighbor : neighbors) {
+                if (neighbor.equals(end)) {
+                    return len + 1;
+                }
+                if (dict.contains(neighbor) && !visited.contains(neighbor)) {
+                    queue.add(neighbor);
+                    visited.add(neighbor);
+                    nextLayer++;
+                }
+            }
+            if (curLayer == 0) {
+                curLayer = nextLayer;
+                nextLayer = 0;
+                len++;
+            }
+        }
+        return 0;
+    }
+    
+    public Set<String> neighbors(String s) {
+        Set<String> res = new HashSet<String>();
+        for (int i = 0; i < s.length(); i++) {
+            for (char c = 'a'; c <= 'z'; c++) {
+                if (c != s.charAt(i)) {
+                    StringBuffer sb = new StringBuffer(s);
+                    sb.setCharAt(i, c);
+                    res.add(sb.toString());
+                }
+            }
+        }
+        return res;
+    }
+    
 	public int ladderLength(String start, String end, HashSet<String> dict) {
 		Queue<String> wordQueue = new LinkedList<String>();
 		int curLevel = 0;
@@ -87,14 +130,18 @@ public class Solution {
 	
 	
 	public static void main(String[] args) {
-		HashSet<String> set = new HashSet<String>();
+		Set<String> set = new HashSet<String>();
 		set.add("hot");
-		set.add("dot");
+		set.add("cog");
 		set.add("dog");
-		set.add("log");
-		set.add("lot");
+		set.add("tot");
+		set.add("hog");
+		set.add("hop");
+		set.add("pot");
+		set.add("dot");
 		
-		System.out.println(new Solution().ladderLength("hit", "cog", set));
+		
+		System.out.println(new Solution().ladderLength("hot", "dog", set));
 	}
 	
 }

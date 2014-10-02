@@ -56,5 +56,11 @@ public class Solution {
     	for (Interval i : res) {
     		System.out.println(i.start + " " + i.end);
     	}
+    	System.out.println("abcd   hell".split(" ").length);
+    	int div = 1;
+    	for (int i = 2; i <= 9; i++) {
+    		div *= i;
+    	}
+    	System.out.println(div);
     }
 }

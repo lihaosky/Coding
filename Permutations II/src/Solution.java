@@ -66,5 +66,7 @@ public class Solution {
     			}
     		}
     	}
+    	int n = 101; 
+    	System.out.println(n & 1);
     }
 }

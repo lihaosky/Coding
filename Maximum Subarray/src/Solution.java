@@ -22,4 +22,18 @@ public class Solution {
         }
         return max;
     }
+    
+    public int maxSubArray1(int[] A) {
+        int max = Integer.MIN_VALUE, subMax = 0;
+        for (int i = 0; i < A.length; i++) {
+            subMax += A[i];
+            if (subMax > max) {
+                max = subMax;
+            }
+            if (subMax < 0) {
+                subMax = 0;
+            }
+        }
+        return max;
+    }
 }

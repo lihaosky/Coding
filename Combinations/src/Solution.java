@@ -1,4 +1,4 @@
-import java.util.ArrayList;
+import java.util.*;
 
 /**
  *  Given two integers n and k, return all possible combinations of k numbers out of 1 ... n.
@@ -19,6 +19,26 @@ If n = 4 and k = 2, a solution is:
  *
  */
 public class Solution {
+    public List<List<Integer>> combine1(int n, int k) {
+        if (k == 0) {
+            List<List<Integer>> res = new ArrayList<List<Integer>>();
+            res.add(new ArrayList<Integer>());
+            return res;
+        }
+        if (n < k) {
+            return null;
+        }
+        List<List<Integer>> res = combine1(n - 1, k - 1);
+        for (int i = 0; i < res.size(); i++) {
+            res.get(i).add(n);
+        }
+        List<List<Integer>> res1 = combine1(n - 1, k);
+        for (int i = 0; res1 != null && i < res1.size(); i++) {
+            res.add(res1.get(i));
+        }
+        return res;
+    }
+    
     public ArrayList<ArrayList<Integer>> combine(int n, int k) {
     	ArrayList<ArrayList<Integer>> res = new ArrayList<ArrayList<Integer>>();
     	if (n < k) {
@@ -53,5 +73,6 @@ public class Solution {
     
     public static void main(String[] args) {
     	printList(new Solution().combine(1, 1));
+    	System.out.println("ab".substring(2).length());
     }
 }

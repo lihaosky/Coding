@@ -1,4 +1,5 @@
 import java.util.Hashtable;
+import java.util.*;
 
 /**
  *  Given an unsorted array of integers, find the length of the longest consecutive elements sequence.
@@ -11,7 +12,41 @@ Your algorithm should run in O(n) complexity.
  * @author lihaosky
  *
  */
+class Boundary {
+    public int left;
+    public int right;
+    
+    public Boundary(int left, int right) {
+        this.left = left;
+        this.right = right;
+    }
+}
+
 public class Solution {
+    public int longestConsecutive1(int[] num) {
+        HashMap<Integer, Boundary> intBoundMap = new HashMap<Integer, Boundary>();
+        int maxLen = 1;
+        for (int i = 0; i < num.length; i++) {
+            if (!intBoundMap.containsKey(num[i])) {
+                int left = num[i];
+                int right = num[i];
+                if (intBoundMap.containsKey(num[i] - 1)) {
+                    left = intBoundMap.get(num[i] - 1).left;
+                }
+                if (intBoundMap.containsKey(num[i] + 1)) {
+                    right = intBoundMap.get(num[i] + 1).right;
+                }
+                intBoundMap.put(num[i], new Boundary(left, right));
+                if (right - left + 1 > maxLen) {
+                    maxLen = right - left + 1;
+                }
+                intBoundMap.get(left).right = right;
+                intBoundMap.get(right).left = left;
+            }
+        }
+        return maxLen;
+    }
+    
     public int longestConsecutive(int[] num) {
         Hashtable<Integer, int[]> numLowHighTable = new Hashtable<Integer, int[]>();
         int longest = 0;
