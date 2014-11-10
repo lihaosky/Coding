@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="3Sum Closest/src"/>
+	<classpathentry kind="src" path="3Sum/src"/>
+	<classpathentry kind="src" path="4Sum/src"/>
+	<classpathentry kind="src" path="Add Two Numbers/src"/>
+	<classpathentry kind="src" path="Anagrams/src"/>
+	<classpathentry kind="src" path="Barrier/src"/>
+	<classpathentry kind="src" path="Binary Tree Level Order Traversal/src"/>
+	<classpathentry kind="src" path="Binary Tree Postorder Traversal/src"/>
+	<classpathentry kind="src" path="Binary Tree Preorder Traversal/src"/>
+	<classpathentry kind="src" path="Calculator/src"/>
+	<classpathentry kind="src" path="Candy/src"/>
+	<classpathentry kind="src" path="Clone Graph/src"/>
+	<classpathentry kind="src" path="Combination Sum II/src"/>
+	<classpathentry kind="src" path="Combination Sum/src"/>
+	<classpathentry kind="src" path="Combinations/src"/>
+	<classpathentry kind="src" path="Construct Binary Tree from Inorder and Postorder Traversal/src"/>
+	<classpathentry kind="src" path="Construct Binary Tree from Preorder and Inorder Traversal/src"/>
+	<classpathentry kind="src" path="Container With Most Water/src"/>
+	<classpathentry kind="src" path="Convert Sorted Array to Binary Search Tree/src"/>
+	<classpathentry kind="src" path="Convert Sorted List to Binary Search Tree/src"/>
+	<classpathentry kind="src" path="Copy List with Random Pointer/src"/>
+	<classpathentry kind="src" path="Count and Say/src"/>
+	<classpathentry kind="src" path="cracking/1.1/src"/>
+	<classpathentry kind="src" path="cracking/1.2/src"/>
+	<classpathentry kind="src" path="cracking/1.5/src"/>
+	<classpathentry kind="src" path="cracking/1.6/src"/>
+	<classpathentry kind="src" path="cracking/1.8/src"/>
+	<classpathentry kind="src" path="cracking/2.1/src"/>
+	<classpathentry kind="src" path="cracking/2.3/src"/>
+	<classpathentry kind="src" path="cracking/2.4/src"/>
+	<classpathentry kind="src" path="cracking/3.2/src"/>
+	<classpathentry kind="src" path="cracking/3.5/src"/>
+	<classpathentry kind="src" path="cracking/4.3/src"/>
+	<classpathentry kind="src" path="cracking/4.5/src"/>
+	<classpathentry kind="src" path="cracking/4.6/src"/>
+	<classpathentry kind="src" path="cracking/5.2/src"/>
+	<classpathentry kind="src" path="cracking/5.3/src"/>
+	<classpathentry kind="src" path="cracking/5.6/src"/>
+	<classpathentry kind="src" path="cracking/5.7/src"/>
+	<classpathentry kind="src" path="cracking/Queue/src"/>
+	<classpathentry kind="src" path="cracking/Stack/src"/>
+	<classpathentry kind="src" path="Decode Ways/src"/>
+	<classpathentry kind="src" path="Distinct Subsequences/src"/>
+	<classpathentry kind="src" path="Divide Two Integers/src"/>
+	<classpathentry kind="src" path="Edit Distance/src"/>
+	<classpathentry kind="src" path="Evaluate Reverse Polish Notation/src"/>
+	<classpathentry kind="src" path="Expression Evaluation/src"/>
+	<classpathentry kind="src" path="First Missing Positive/src"/>
+	<classpathentry kind="src" path="Flatten Binary Tree to Linked List/src"/>
+	<classpathentry kind="src" path="Gas Station/src"/>
+	<classpathentry kind="src" path="Generate Parentheses/src"/>
+	<classpathentry kind="src" path="Gray Code/src"/>
+	<classpathentry kind="src" path="Insertion Sort List/src"/>
+	<classpathentry kind="src" path="insertion_sort"/>
+	<classpathentry kind="src" path="Integer to Roman/src"/>
+	<classpathentry kind="src" path="Interleaving String/src"/>
+	<classpathentry kind="src" path="Jump Game II/src"/>
+	<classpathentry kind="src" path="Jump Game/src"/>
+	<classpathentry kind="src" path="Kth number in 2 sorted arrays/src"/>
+	<classpathentry kind="src" path="Largest Rectangle in Histogram/src"/>
+	<classpathentry kind="src" path="Letter Combinations of a Phone Number/src"/>
+	<classpathentry kind="src" path="Linked List Cycle/src"/>
+	<classpathentry kind="src" path="Longest Common Prefix/src"/>
+	<classpathentry kind="src" path="Longest Consecutive Sequence/src"/>
+	<classpathentry kind="src" path="Longest Palindromic Substring/src"/>
+	<classpathentry kind="src" path="Longest Substring Without Repeating Characters/src"/>
+	<classpathentry kind="src" path="Longest Valid Parentheses/src"/>
+	<classpathentry kind="src" path="LRU Cache/src"/>
+	<classpathentry kind="src" path="Max Points on a Line/src"/>
+	<classpathentry kind="src" path="Maximum rectangle/src"/>
+	<classpathentry kind="src" path="Maximum Subarray/src"/>
+	<classpathentry kind="src" path="MaxPath/src"/>
+	<classpathentry kind="src" path="MedianOfTwoSortedArray/src"/>
+	<classpathentry kind="src" path="Merge Intervals/src"/>
+	<classpathentry kind="src" path="Merge k Sorted Lists/src"/>
+	<classpathentry kind="src" path="Merge Two Sorted Lists/src"/>
+	<classpathentry kind="src" path="Minimum Window Substring/src"/>
+	<classpathentry kind="src" path="misc/Common Ancestor/src"/>
+	<classpathentry kind="src" path="misc/h-index/src"/>
+	<classpathentry kind="src" path="misc/Kth smallest in sorted arrays/src"/>
+	<classpathentry kind="src" path="misc/sum to target/src"/>
+	<classpathentry kind="src" path="Multiply Strings/src"/>
+	<classpathentry kind="src" path="N-Queens II/src"/>
+	<classpathentry kind="src" path="N-Queens/src"/>
+	<classpathentry kind="src" path="New folder/src"/>
+	<classpathentry kind="src" path="Next Permutation/src"/>
+	<classpathentry kind="src" path="Palindrome Number/src"/>
+	<classpathentry kind="src" path="Partition List/src"/>
+	<classpathentry kind="src" path="Pascal&apos;s Triangle/src"/>
+	<classpathentry kind="src" path="Permutation Sequence/src"/>
+	<classpathentry kind="src" path="Permutations II/src"/>
+	<classpathentry kind="src" path="Permutations/src"/>
+	<classpathentry kind="src" path="Quicksort/src"/>
+	<classpathentry kind="src" path="Recover Binary Search Tree/src"/>
+	<classpathentry kind="src" path="Regular Expression Matching/src"/>
+	<classpathentry kind="src" path="Remove Duplicates from Sorted List/src"/>
+	<classpathentry kind="src" path="Remove Nth Node From End of List/src"/>
+	<classpathentry kind="src" path="Reorder List/src"/>
+	<classpathentry kind="src" path="Restore IP Addresses/src"/>
+	<classpathentry kind="src" path="Reverse Integer/src"/>
+	<classpathentry kind="src" path="Reverse Linked List II/src"/>
+	<classpathentry kind="src" path="Roman to Integer/src"/>
+	<classpathentry kind="src" path="Rotate Image/src"/>
+	<classpathentry kind="src" path="Rotate List/src"/>
+	<classpathentry kind="src" path="Scramble String/src"/>
+	<classpathentry kind="src" path="Search for a Range/src"/>
+	<classpathentry kind="src" path="Search in Rotated Sorted Array II/src"/>
+	<classpathentry kind="src" path="Search in Rotated Sorted Array/src"/>
+	<classpathentry kind="src" path="Search Insert Position/src"/>
+	<classpathentry kind="src" path="Sort List/src"/>
+	<classpathentry kind="src" path="Spiral Matrix/src"/>
+	<classpathentry kind="src" path="sqrt/src"/>
+	<classpathentry kind="src" path="String to Integer (atoi)/src"/>
+	<classpathentry kind="src" path="Subsets II/src"/>
+	<classpathentry kind="src" path="Subsets/src"/>
+	<classpathentry kind="src" path="Substring with Concatenation of All Words/src"/>
+	<classpathentry kind="src" path="Sudoku Solver/src"/>
+	<classpathentry kind="src" path="Surrounded Regions/src"/>
+	<classpathentry kind="src" path="Swap Nodes in Pairs/src"/>
+	<classpathentry kind="src" path="Text Justification/src"/>
+	<classpathentry kind="src" path="Trapping Rain Water/src"/>
+	<classpathentry kind="src" path="Triangle/src"/>
+	<classpathentry kind="src" path="Two Egg/src"/>
+	<classpathentry kind="src" path="Two Sum/src"/>
+	<classpathentry kind="src" path="TwoSum/src"/>
+	<classpathentry kind="src" path="Unique Binary Search Trees II/src"/>
+	<classpathentry kind="src" path="Valid Parentheses/src"/>
+	<classpathentry kind="src" path="Valid Sudoku/src"/>
+	<classpathentry kind="src" path="Wildcard Matching/src"/>
+	<classpathentry kind="src" path="Word Ladder II/src"/>
+	<classpathentry kind="src" path="Word Ladder/src"/>
+	<classpathentry kind="src" path="Word Search/src"/>
+	<classpathentry kind="src" path="ZigZag Conversion/src"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="output" path="sqrt/bin"/>
+</classpath>
